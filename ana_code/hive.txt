@@ -1,0 +1,50 @@
+#create table
+CREATE EXTERNAL TABLE finalproject_table(Housing INT, Age INT, Sex INT, Employment INT, Monthly_income FLOAT, Credit INT)ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE LOCATION '/user/yl5287/finalproject/input';
+
+#view table
+select * from finalproject_table;
+
+#credit good people gender distribution 
+select sex, count(sex) as gender_count from finalproject_table where credit = 1 group by sex;
+
+#credit good people housing distribution
+select housing, count(housing) as housing_count from finalproject_table where credit = 1 group by housing;
+
+#credit good people age distribution
+select age, count(age) as age_group from finalproject_table where credit = 1 group by age;
+
+#credit good people employment distribution
+select employment, count(employment) as jobs from finalproject_table where credit = 1 group by employment;
+
+#credit good people number of multiples of average income distribution
+select round(monthly_income,1) as round_income, count(round(monthly_income,1)) as income_group from finalproject_table where credit = 1 group by round(monthly_income,1);
+
+#credit bad people gender distribution
+select sex, count(sex) as gender_count from finalproject_table where credit = 0 group by sex;
+
+#credit bad people housing distribution
+select housing, count(housing) as housing_count from finalproject_table where credit = 0 group by housing;
+
+#credit bad people age distribution
+select age, count(age) as age_group from finalproject_table where credit = 0 group by age;
+
+#credit bad people employment distribution
+select employment, count(employment) as jobs from finalproject_table where credit = 0 group by employment;
+
+#credit bad people number of multiples of average income distribution
+select round(monthly_income,1) as round_income, count(round(monthly_income,1)) as income_group from finalproject_table where credit = 0 group by round(monthly_income,1);
+
+#view info of people with negative monthly income
+select * from finalproject_table where monthly_income < 0;
+
+#Count the number of good and bad credit for male who is employed and own housing
+select credit, count(credit) from finalproject_table where (housing = 0 and sex = 0 and employment = 0) group by credit;
+
+#Count the number of good and bad credit for female who is unemployed with no owned housing:
+select credit, count(credit) from finalproject_table where (housing = 1 and sex = 1 and employment = 1) group by credit;
+
+#Count the number of good and bad credit for male who is employed
+select credit, count(credit) from finalproject_table where (sex = 1 and employment = 1) group by credit;
+
+#Count the number of good and bad credit for female who is unemployed
+select credit, count(credit) from finalproject_table where (sex = 0 and employment = 0) group by credit;
